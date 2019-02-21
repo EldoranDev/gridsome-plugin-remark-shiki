@@ -1,5 +1,9 @@
 # gridsome-plugin-remark-shiki
 
+<a href="https://www.npmjs.com/package/gridsome-plugin-remark-shiki">
+    <img src="https://img.shields.io/npm/v/gridsome-plugin-remark-shiki.svg" alt="Version">
+</a>
+
 > Syntax highlighter for markdown code blocks using [shiki](https://shiki.matsu.io/)
 
 ## Install
