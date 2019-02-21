@@ -5,10 +5,19 @@ script: yarn run lint
 branches:
   only:
     - develop
+    - master
+
 deploy:
-  provider: npm
-  email: $NPM_EMAIL
-  api_key: $NPM_TOKEN
-  tag: dev
-  on:
-    branch: develop
+  - provider: npm
+    email: $NPM_EMAIL
+    api_key: $NPM_TOKEN
+    tag: dev
+    on:
+      branch: develop
+  - provider: npm
+    email: $NPM_EMAIL
+    api_key: $NPM_TOKEN
+    tag: latest
+    on:
+      tag: true
+
