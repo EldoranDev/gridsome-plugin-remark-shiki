@@ -1,5 +1,5 @@
 {
-  "version": "0.1.2",
+  "version": "0.1.3",
   "name": "gridsome-plugin-remark-shiki",
   "description": "Shiki for Gridsome",
   "homepage": "https://github.com/EldoranDev/gridsome-plugin-remark-shiki/blob/develop/README.md",
