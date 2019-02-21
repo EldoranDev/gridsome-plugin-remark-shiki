@@ -1,9 +1,12 @@
 {
-  "version": "0.0.0",
+  "version": "0.1.3",
   "name": "gridsome-plugin-remark-shiki",
   "description": "Shiki for Gridsome",
-  "homepage": "https://github.com/gridsome/gridsome/tree/master/packages/remark-shiki#readme",
-  "repository": "https://github.com/gridsome/gridsome/tree/master/packages/remark-shiki",
+  "homepage": "https://github.com/EldoranDev/gridsome-plugin-remark-shiki/blob/develop/README.md",
+  "repository": "https://github.com/EldoranDev/gridsome-plugin-remark-shiki/",
+  "scripts": {
+    "lint": "eslint --fix *.js"
+  },
   "main": "index.js",
   "keywords": [
     "gridsome",
@@ -21,5 +24,11 @@
   },
   "engines": {
     "node": ">=8"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.1",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-vue": "^5.1.0",
+    "eslint-plugin-vue-libs": "^3.0.0"
   }
 }
