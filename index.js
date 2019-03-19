@@ -31,14 +31,16 @@ module.exports = (options) => {
       }
     })
 
-    visit(tree, 'inlineCode', node => {
-      node.type = 'html'
-      try {
-        node.value = highlight(node, CLASS_INLINE, highlighter)
-      } catch (e) {
-        node.value = ERROR_MESSAGE
-      }
-    })
+    if (!options.skipInline) {
+      visit(tree, 'inlineCode', node => {
+        node.type = 'html'
+        try {
+          node.value = highlight(node, CLASS_INLINE, highlighter)
+        } catch (e) {
+          node.value = ERROR_MESSAGE
+        }
+      })
+    }
   }
 }
 
