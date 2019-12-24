@@ -1,30 +1,19 @@
 # gridsome-plugin-remark-shiki
 
-<a href="https://www.npmjs.com/package/gridsome-plugin-remark-shiki">
-    <img src="https://img.shields.io/npm/v/gridsome-plugin-remark-shiki.svg" alt="Version">
-</a>
+[![Version](https://img.shields.io/npm/v/gridsome-plugin-remark-shiki.svg)](https://www.npmjs.com/package/gridsome-plugin-remark-shiki)
 
 > Syntax highlighter for markdown code blocks using [shiki](https://shiki.matsu.io/)
 
 ## Install
-- `yarn add gridsome-plugin-remark-shiki`
-- `npm install gridsome-plugin-remark-shiki`
+
+```sh
+yarn add gridsome-plugin-remark-shiki
+npm install gridsome-plugin-remark-shiki
+```
 
 ## Usage
 
 Add syntax highlighter to a single markdown source using the given options:
-
-```js
-{
-  // Can be any of
-  // https://github.com/octref/shiki/tree/master/packages/themes
-  // and will default to 'nord'
-  theme: 'nord',
-  
-  // Set to `true` to skip highlighting inline `code` elements.
-  skipInline: false
-}
-```
 
 ```js
 module.exports = {
@@ -36,7 +25,7 @@ module.exports = {
         route: '/blog/:year/:month/:day/:slug',
         remark: {
           plugins: [
-            [ 'gridsome-plugin-remark-shiki', { theme: 'nord' } ]
+            [ 'gridsome-plugin-remark-shiki', { theme: 'nord', skipInline: false } ]
           ]
         }
       }
@@ -63,5 +52,30 @@ module.exports = {
       ]
     }
   }
+}
+```
+
+Use custom themes with the syntax highlighter:
+
+```js
+const shiki = require('shiki')
+
+const customTheme = shiki.loadTheme('./static/custom-theme.json')
+
+module.exports = {
+  plugins: [
+    {
+      use: '@gridsome/source-filesystem',
+      options: {
+        path: 'blog/**/*.md',
+        typeName: 'Post',
+        remark: {
+          plugins: [
+            [ 'gridsome-plugin-remark-shiki', { theme: customTheme, skipInline: true } ]
+          ]
+        }
+      }
+    }
+  ]
 }
 ```

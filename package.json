@@ -1,5 +1,5 @@
 {
-  "version": "0.3.0",
+  "version": "0.3.1",
   "name": "gridsome-plugin-remark-shiki",
   "description": "Shiki for Gridsome",
   "homepage": "https://github.com/EldoranDev/gridsome-plugin-remark-shiki/blob/develop/README.md",
@@ -15,9 +15,9 @@
     "remark"
   ],
   "dependencies": {
-    "shiki": "^0.1.2",
-    "shiki-languages": "^0.1.0",
-    "unist-util-visit": "^1.4.0"
+    "shiki": "^0.1.6",
+    "shiki-languages": "^0.1.6",
+    "unist-util-visit": "^2.0.1"
   },
   "publishConfig": {
     "access": "public"
@@ -26,9 +26,9 @@
     "node": ">=8"
   },
   "devDependencies": {
-    "eslint": "^5.12.1",
-    "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-vue": "^5.1.0",
-    "eslint-plugin-vue-libs": "^3.0.0"
+    "eslint": "^6.8.0",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-vue": "^6.0.1",
+    "eslint-plugin-vue-libs": "^4.0.0"
   }
 }
