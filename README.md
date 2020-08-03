@@ -80,7 +80,7 @@ module.exports = {
 }
 ```
 
-Use with [@gridsome/vue-remark](https://gridsome.org/plugins/@gridsome/vue-remark)
+Use with [@gridsome/vue-remark](https://gridsome.org/plugins/@gridsome/vue-remark):
 
 ```js
 module.exports = {
