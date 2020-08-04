@@ -79,3 +79,26 @@ module.exports = {
   ]
 }
 ```
+
+Use with [@gridsome/vue-remark](https://gridsome.org/plugins/@gridsome/vue-remark):
+
+```js
+module.exports = {
+  plugins: [
+    {
+      use: '@gridsome/vue-remark',
+      options: {
+        typeName: 'BlogPost',
+        baseDir: './blog/posts',
+        template: './src/templates/BlogPost.vue',
+        plugins: [
+          [
+            'gridsome-plugin-remark-shiki',
+            { theme: 'nord', skipInline: true },
+          ],
+        ],
+      },
+    },
+  ],
+};
+```
