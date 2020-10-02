@@ -1,5 +1,5 @@
 const shiki = require('shiki')
-const { commonLangIds, commonLangAliases, otherLangIds } = require('shiki-languages')
+const { BUNDLED_LANGUAGES } = require('shiki-languages')
 const visit = require('unist-util-visit')
 
 const CLASS_BLOCK = 'shiki'
@@ -7,19 +7,19 @@ const CLASS_INLINE = 'shiki-inline'
 
 const ERROR_MESSAGE = '<code>ERROR Rendering Code Block</code>'
 
-const languages = [
-  ...commonLangIds,
-  ...commonLangAliases,
-  ...otherLangIds
-]
-
 module.exports = (options) => {
-  const theme = options.theme ? options.theme : 'nord'
+  let theme = options.theme ? options.theme : 'nord'
+
+  try {
+    shiki.getTheme(theme)
+  } catch (e) {
+    console.error(`Shiki theme ${theme} could not get loaded.`)
+    theme = 'nord'
+  }
 
   return async tree => {
     const highlighter = await shiki.getHighlighter({
-      theme,
-      langs: languages
+      theme
     })
 
     visit(tree, 'code', node => {
@@ -45,7 +45,7 @@ module.exports = (options) => {
 }
 
 function highlight ({ value, lang }, cls, highlighter) {
-  const index = languages.findIndex((x) => x === lang)
+  const index = BUNDLED_LANGUAGES.findIndex((x) => x.id === lang)
   const theme = shiki.getTheme('nord')
 
   if (index >= 0) {

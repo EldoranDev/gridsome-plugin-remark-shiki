@@ -1,5 +1,5 @@
 {
-  "version": "0.3.1",
+  "version": "0.4.0",
   "name": "gridsome-plugin-remark-shiki",
   "description": "Shiki for Gridsome",
   "homepage": "https://github.com/EldoranDev/gridsome-plugin-remark-shiki/blob/develop/README.md",
@@ -15,8 +15,8 @@
     "remark"
   ],
   "dependencies": {
-    "shiki": "^0.1.6",
-    "shiki-languages": "^0.1.6",
+    "shiki": "^0.2.6",
+    "shiki-languages": "^0.2.6",
     "unist-util-visit": "^2.0.1"
   },
   "publishConfig": {
