@@ -45,7 +45,9 @@ module.exports = (options) => {
 }
 
 function highlight ({ value, lang }, cls, highlighter) {
-  const index = BUNDLED_LANGUAGES.findIndex((x) => x.id === lang)
+  const index = BUNDLED_LANGUAGES.findIndex((x) => {
+    return x.id === lang || (x.aliases && x.aliases.includes(lang))
+  })
   const theme = shiki.getTheme('nord')
 
   if (index >= 0) {
