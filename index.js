@@ -51,18 +51,8 @@ function highlight ({ value, lang }, cls, highlighter) {
 
   if (index >= 0) {
     return highlighter.codeToHtml(value, lang)
-  }
-  else {
+  } else {
     // fallback for unknown languages
     return highlighter.codeToHtml(value, 'txt')
   }
-
-}
-
-function escape (value) {
-  return value.replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
 }
