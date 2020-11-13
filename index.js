@@ -48,14 +48,15 @@ function highlight ({ value, lang }, cls, highlighter) {
   const index = BUNDLED_LANGUAGES.findIndex((x) => {
     return x.id === lang || (x.aliases && x.aliases.includes(lang))
   })
-  const theme = shiki.getTheme('nord')
 
   if (index >= 0) {
     return highlighter.codeToHtml(value, lang)
   }
+  else {
+    // fallback for unknown languages
+    return highlighter.codeToHtml(value, 'txt')
+  }
 
-  // Fallback for unknown languages.
-  return `<pre class="${cls}" style="background: ${theme.bg};"><code class="${cls}" style="background: ${theme.bg}; color: ${theme.colors['terminal.foreground']}">${escape(value)}</code></pre>`
 }
 
 function escape (value) {
