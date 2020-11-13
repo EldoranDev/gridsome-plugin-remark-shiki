@@ -55,7 +55,7 @@ function highlight ({ value, lang }, cls, highlighter) {
   }
 
   // Fallback for unknown languages.
-  return `<code class="${cls}" style="background: ${theme.bg}; color: ${theme.colors['terminal.foreground']}">${escape(value)}</code>`
+  return `<pre class="${cls}" style="background: ${theme.bg};"><code class="${cls}" style="background: ${theme.bg}; color: ${theme.colors['terminal.foreground']}">${escape(value)}</code></pre>`
 }
 
 function escape (value) {
