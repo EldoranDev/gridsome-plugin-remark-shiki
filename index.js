@@ -5,7 +5,11 @@ const visit = require('unist-util-visit')
 const CLASS_BLOCK = 'shiki'
 const CLASS_INLINE = 'shiki-inline'
 
+const FALLBACK_LANGUAGE = 'text'
+
 const ERROR_MESSAGE = '<code>ERROR Rendering Code Block</code>'
+
+const LANG_TEXT = ['text', 'txt', 'plaintext']
 
 module.exports = (options) => {
   let theme = options.theme ? options.theme : 'nord'
@@ -49,10 +53,10 @@ function highlight ({ value, lang }, cls, highlighter) {
     return x.id === lang || (x.aliases && x.aliases.includes(lang))
   })
 
-  if (index >= 0) {
+  if (index >= 0 || LANG_TEXT.includes(lang)) {
     return highlighter.codeToHtml(value, lang)
   } else {
     // fallback for unknown languages
-    return highlighter.codeToHtml(value, 'txt')
+    return highlighter.codeToHtml(value, FALLBACK_LANGUAGE)
   }
 }
