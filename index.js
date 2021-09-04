@@ -1,62 +1,97 @@
 const shiki = require('shiki')
-const { BUNDLED_LANGUAGES } = require('shiki-languages')
 const visit = require('unist-util-visit')
-
-const CLASS_BLOCK = 'shiki'
-const CLASS_INLINE = 'shiki-inline'
+const rangeParser = require('parse-numeric-range')
+const { renderToHtml } = require('./renderer')
 
 const FALLBACK_LANGUAGE = 'text'
-
-const ERROR_MESSAGE = '<code>ERROR Rendering Code Block</code>'
-
 const LANG_TEXT = ['text', 'txt', 'plaintext']
 
-module.exports = (options) => {
-  let theme = options.theme ? options.theme : 'nord'
+const resolveLanguage = (lang, aliases) => (aliases && aliases[lang] ? aliases[lang] : lang)
 
-  try {
-    shiki.getTheme(theme)
-  } catch (e) {
-    console.error(`Shiki theme ${theme} could not get loaded.`)
-    theme = 'nord'
-  }
+const parseMeta = meta => {
+  const opts = meta.slice(1, -1)
+  const linesToHighlight = rangeParser(opts)
 
-  return async tree => {
-    const highlighter = await shiki.getHighlighter({
-      theme
-    })
-
-    visit(tree, 'code', node => {
-      node.type = 'html'
-      try {
-        node.value = highlight(node, CLASS_BLOCK, highlighter)
-      } catch (e) {
-        node.value = ERROR_MESSAGE
-      }
-    })
-
-    if (!options.skipInline) {
-      visit(tree, 'inlineCode', node => {
-        node.type = 'html'
-        try {
-          node.value = highlight(node, CLASS_INLINE, highlighter)
-        } catch (e) {
-          node.value = ERROR_MESSAGE
-        }
-      })
-    }
+  return {
+    linesToHighlight: linesToHighlight && linesToHighlight.length > 0 ? linesToHighlight : null
   }
 }
 
-function highlight ({ value, lang }, cls, highlighter) {
-  const index = BUNDLED_LANGUAGES.findIndex((x) => {
-    return x.id === lang || (x.aliases && x.aliases.includes(lang))
-  })
+const highlight = ({ value, lang, meta }, highlighter, options) => {
+  const htmlRendererOptions = options.htmlRendererOptions || {}
 
-  if (index >= 0 || LANG_TEXT.includes(lang)) {
-    return highlighter.codeToHtml(value, lang)
+  if (lang.includes('{') && lang.endsWith('}')) {
+    const sep = lang.split(/(?={)/)
+    lang = sep[0]
+    meta = sep[1]
+  }
+
+  const language = resolveLanguage(lang, options.aliases)
+  const index = shiki.BUNDLED_LANGUAGES.findIndex(
+    x => x.id === language || (x.aliases && x.aliases.includes(language))
+  )
+
+  if (options.showLanguage) {
+    htmlRendererOptions.langId = language
+  }
+
+  const lines =
+    index >= 0 || LANG_TEXT.includes(language)
+      ? highlighter.codeToThemedTokens(value, language)
+      : highlighter.codeToThemedTokens(value, FALLBACK_LANGUAGE)
+
+  let metaOptions
+  if (meta) {
+    metaOptions = parseMeta(meta)
+  }
+
+  if (lines.length > 1) {
+    if (options.showLineNumbers) {
+      const maxWidth = `${lines.length}`.length
+      htmlRendererOptions.showLineNumbers = true
+      htmlRendererOptions.lineNumberFormatter = lineNumber => `${lineNumber}`.padStart(maxWidth)
+    }
+
+    htmlRendererOptions.linesToHighlight =
+      options.highlightLines && metaOptions && metaOptions.linesToHighlight
+        ? metaOptions.linesToHighlight
+        : null
   } else {
-    // fallback for unknown languages
-    return highlighter.codeToHtml(value, FALLBACK_LANGUAGE)
+    htmlRendererOptions.showLineNumbers = false
+  }
+
+  return renderToHtml(lines, htmlRendererOptions)
+}
+
+const traverse = (tree, tokenType, highlighter, options) => {
+  visit(tree, tokenType, node => {
+    node.type = 'html'
+    try {
+      node.value = highlight(node, highlighter, options)
+    } catch (e) {
+      node.value = '<code>ERROR Rendering Code Block</code>'
+    }
+  })
+}
+
+module.exports = options => {
+  const theme = options.theme ? options.theme : 'nord'
+  options.aliases = options.aliases ? options.aliases : {}
+
+  return async tree => {
+    const highlighter = await shiki.getHighlighter({ theme })
+
+    try {
+      const { fg, bg } = highlighter.getTheme()
+      options.htmlRendererOptions = { fg, bg }
+
+      traverse(tree, 'code', highlighter, options)
+
+      if (!options.skipInline) {
+        traverse(tree, 'inlineCode', highlighter, options)
+      }
+    } catch (e) {
+      console.error(`Failed to load Shiki theme ${theme}`)
+    }
   }
 }
